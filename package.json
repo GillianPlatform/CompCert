@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@opam/menhir": "*",
-    "ocaml": "4.14.x",
+    "ocaml": ">=4.14.x",
     "@opam/dune": "^2.9"
   },
   "devDependencies": {

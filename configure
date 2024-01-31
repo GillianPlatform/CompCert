@@ -541,6 +541,8 @@ case "$ocaml_ver" in
         missingtools=true;;
   4.*)
         echo "version $ocaml_ver -- good!";;
+  5.*)
+        echo "version $ocaml_ver -- there may be issues!";;
   ?.*)
         echo "version $ocaml_ver -- UNSUPPORTED"
         echo "Error: CompCert requires OCaml version 4.05 or later."
