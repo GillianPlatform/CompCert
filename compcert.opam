@@ -5,13 +5,10 @@ synopsis: "Extraction of a useful fragment of CompCert for Gillian-C"
 description: """
 """
 homepage:"https://compcert.org/"
-bug-reports:""
 maintainer: ["Sacha Ayoun <sachaayoun@gmail.com>"]
 authors: [
   "Sacha Ayoun <sachaayoun@gmail.com>"
 ]
-bug_reports:"None"
-license: "No"
 depends: [
   "menhir"
   "ocaml"
