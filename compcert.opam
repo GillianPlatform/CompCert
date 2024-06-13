@@ -25,6 +25,7 @@ build: [
     "build"
     "-p"
     name
+    "@install"
     "-j"
     jobs
   ]
