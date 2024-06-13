@@ -12,12 +12,13 @@ authors: [
 ]
 license: "No"
 depends: [
-  "menhir" {< "20200123" }
-  "ocaml" {>= "4.10.0"}
-  "dune" {>= "2.0"}
+  "menhir"
+  "ocaml"
+  "dune"
 ]
 build: [
-  ["./configure" "--ignore-coq" "x86_64-macosx"]
+  ["./configure" "--ignore-coq" "x86_64-macosx" "--ignore-menhirlib"] { os:macos }
+  ["./configure" "--ignore-coq" "x86_64-linus" "--ignore-menhirlib"] { os:linux }
   [make "compcert.ini"]
   ["cp" "compcert.ini" "customlib/compcert.ini"]
   [
@@ -27,6 +28,5 @@ build: [
     name
     "-j"
     jobs
-    "@install"
   ]
 ]
