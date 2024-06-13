@@ -8,8 +8,8 @@
 (install
   (files compcert.ini)
   (section
-  (site
-    (compcert iniConfig))))
+    (site
+      (compcert iniConfig))))
     
 (generate_sites_module
   (module iniConfig)
