@@ -15,6 +15,7 @@ depends: [
   "menhir"
   "ocaml"
   "dune"
+  "dune-site"
 ]
 build: [
   ["./configure" "--ignore-coq" "x86_64-macosx" "--ignore-menhirlib"]

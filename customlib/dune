@@ -2,9 +2,15 @@
   (name compcert)
   (public_name compcert)
   (modules_without_implementation c dwarfTypes)
-  (libraries menhirLib str unix)
+  (libraries menhirLib str unix dune-site)
   (flags -w -27-9))
 
 (install
   (files compcert.ini)
-  (section share))
+  (section
+  (site
+    (compcert iniConfig))))
+    
+(generate_sites_module
+  (module iniConfig)
+  (sites compcert))

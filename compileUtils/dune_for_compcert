@@ -7,4 +7,10 @@
 
 (install
   (files compcert.ini)
-  (section share))
+  (section
+  (site
+    (compcert iniConfig))))
+    
+(generate_sites_module
+  (module iniConfig)
+  (sites compcert))
