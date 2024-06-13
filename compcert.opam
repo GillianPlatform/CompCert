@@ -10,6 +10,7 @@ maintainer: ["Sacha Ayoun <sachaayoun@gmail.com>"]
 authors: [
   "Sacha Ayoun <sachaayoun@gmail.com>"
 ]
+bug_reports:"None"
 license: "No"
 depends: [
   "menhir"
@@ -20,7 +21,7 @@ depends: [
 build: [
   ["./configure" "--ignore-coq" "x86_64-macosx" "--ignore-menhirlib"]
   # ["./configure" "--ignore-coq" "x86_64-linus" "--ignore-menhirlib"] { os:linux }
-  ["make" "compcert.ini"]
+  [make "compcert.ini"]
   ["cp" "compcert.ini" "customlib/compcert.ini"]
   [
     "dune"
