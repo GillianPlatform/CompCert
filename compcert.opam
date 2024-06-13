@@ -17,9 +17,9 @@ depends: [
   "dune"
 ]
 build: [
-  ["./configure" "--ignore-coq" "x86_64-macosx" "--ignore-menhirlib"] { os:macos }
-  ["./configure" "--ignore-coq" "x86_64-linus" "--ignore-menhirlib"] { os:linux }
-  [make "compcert.ini"]
+  ["./configure" "--ignore-coq" "x86_64-macosx" "--ignore-menhirlib"]
+  # ["./configure" "--ignore-coq" "x86_64-linus" "--ignore-menhirlib"] { os:linux }
+  ["make" "compcert.ini"]
   ["cp" "compcert.ini" "customlib/compcert.ini"]
   [
     "dune"
