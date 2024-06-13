@@ -33,10 +33,7 @@ let absolute_path base file =
 let ini_file_name =
   match search_argv "-conf" with
   | Some s -> absolute_path (Sys.getcwd ()) s
-  | None ->
-    Printf.printf "here is the iniconfig files";
-    List.iter (fun s -> Printf.printf "Iniconfig: %s" s) IniConfig.Sites.iniConfig;
-    (List.nth IniConfig.Sites.iniConfig 0) ^ "/compcert.ini"
+  | None -> (List.nth Site.Sites.iniConfig 0) ^ "/compcert.ini"
 
 let ini_dir = Filename.dirname ini_file_name
 

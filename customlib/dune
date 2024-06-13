@@ -12,5 +12,5 @@
       (compcert iniConfig))))
     
 (generate_sites_module
-  (module iniConfig)
+  (module site)
   (sites compcert))
