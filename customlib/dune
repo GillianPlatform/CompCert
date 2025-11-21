@@ -14,3 +14,31 @@
 (generate_sites_module
   (module site)
   (sites compcert))
+
+(rule
+ (target compcert.ini)
+ (enabled_if (= %{ocaml-config:system} linux))
+ (deps
+  (file ../configure)
+  (file ../VERSION)
+  (file ../Makefile))
+ (action
+  (chdir ..
+   (progn
+    (bash "./configure --ignore-coq x86_64-linux --ignore-menhirlib")
+    (bash "make compcert.ini")
+    (bash "cp ./compcert.ini %{target}")))))
+
+(rule
+ (target compcert.ini)
+ (enabled_if (= %{ocaml-config:system} macosx))
+ (deps
+  (file ../configure)
+  (file ../VERSION)
+  (file ../Makefile))
+ (action
+  (chdir ..
+   (progn
+    (bash "./configure --ignore-coq x86_64-macosx --ignore-menhirlib")
+    (bash "make compcert.ini")
+    (bash "cp ./compcert.ini %{target}")))))

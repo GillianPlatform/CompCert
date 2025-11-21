@@ -33,7 +33,10 @@ let absolute_path base file =
 let ini_file_name =
   match search_argv "-conf" with
   | Some s -> absolute_path (Sys.getcwd ()) s
-  | None -> (List.nth Site.Sites.iniConfig 0) ^ "/compcert.ini"
+  | None ->
+    match Sys.getenv_opt "_COMPCERT_INI" with
+    | Some s -> s
+    | None -> (List.nth Site.Sites.iniConfig 0) ^ "/compcert.ini"
 
 let ini_dir = Filename.dirname ini_file_name
 

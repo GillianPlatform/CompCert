@@ -16,10 +16,6 @@ depends: [
   "dune-site"
 ]
 build: [
-  ["./configure" "--ignore-coq" "x86_64-macosx" "--ignore-menhirlib"] { os = "macos" }
-  ["./configure" "--ignore-coq" "x86_64-linux" "--ignore-menhirlib"] { os = "linux" }
-  [make "compcert.ini"]
-  ["cp" "compcert.ini" "customlib/compcert.ini"]
   [
     "dune"
     "build"

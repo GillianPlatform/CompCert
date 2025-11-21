@@ -81,6 +81,8 @@
 .nia.cache
 .nra.cache
 .csdp.cache
+# opam
+_opam
 
 # esy
 _esy
