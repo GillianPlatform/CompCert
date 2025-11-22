@@ -1,0 +1,12 @@
+(library
+ (name iniCrunch)
+ (package compcert))
+
+(rule
+ (target iniCrunch.ml)
+ (deps
+  (file ../customlib/compcert.ini))
+ (action
+  (with-stdout-to
+   %{target}
+   (bash "ocaml-crunch -m plain -e ini $(dirname %{deps})"))))

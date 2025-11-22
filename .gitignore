@@ -97,3 +97,5 @@ venv
 *.install
 moveScript.sh
 *.merlin
+
+_opam

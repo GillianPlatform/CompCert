@@ -27,16 +27,23 @@ let absolute_path base file =
   else
     file
 
+let (let-) o f = match o with
+| Some o -> o
+| None -> f ()
+
 (* Locate the .ini file, which is either in the same directory as
   the executable or in the directory ../share *)
-
+let site_ini = (List.nth Site.Sites.iniConfig 0) ^ Filename.dir_sep ^ "compcert.ini"
 let ini_file_name =
-  match search_argv "-conf" with
-  | Some s -> absolute_path (Sys.getcwd ()) s
-  | None ->
-    match Sys.getenv_opt "_COMPCERT_INI" with
-    | Some s -> s
-    | None -> (List.nth IniConfig.Sites.iniConfig 0) ^ "/compcert.ini"
+  let- () = search_argv "-conf" |> Option.map (absolute_path (Sys.getcwd ())) in
+  let- () = Sys.getenv_opt "COMPCERT_INI" in
+  let- () = if Sys.file_exists site_ini then Some site_ini else None in
+  let iniContent = IniCrunch.read "compcert.ini" |> Option.get in
+  let filename = Filename.((temp_dir "compcert-" "") ^ dir_sep ^ "compcert.ini") in
+  let oc = open_out filename in
+  output_string oc iniContent;
+  close_out oc;
+  filename
 
 let ini_dir = Filename.dirname ini_file_name
 

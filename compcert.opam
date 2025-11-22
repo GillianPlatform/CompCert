@@ -10,10 +10,11 @@ authors: [
   "Sacha Ayoun <sachaayoun@gmail.com>"
 ]
 depends: [
-  "menhir"
+  "menhir" {= "20231231"}
   "ocaml"
   "dune"
   "dune-site"
+  "crunch"
 ]
 build: [
   [
