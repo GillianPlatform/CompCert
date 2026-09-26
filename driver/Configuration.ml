@@ -31,19 +31,41 @@ let (let-) o f = match o with
 | Some o -> o
 | None -> f ()
 
-(* Locate the .ini file, which is either in the same directory as
-  the executable or in the directory ../share *)
-let site_ini = (List.nth Site.Sites.iniConfig 0) ^ Filename.dir_sep ^ "compcert.ini"
+(* Per-user cache dir: $XDG_CACHE_HOME/compcert or $HOME/.cache/compcert *)
+let cache_dir () =
+  let base = match Sys.getenv_opt "XDG_CACHE_HOME" with
+  | Some d -> Some d
+  | None -> Sys.getenv_opt "HOME" |> Option.map (fun h -> Filename.concat h ".cache") in
+  let mkdir d = if not (Sys.file_exists d) then Sys.mkdir d 0o755 in
+  Option.bind base (fun base ->
+    let dir = Filename.concat base "compcert" in
+    try mkdir base; mkdir dir; Some dir with Sys_error _ -> None)
+
+(* Locate the .ini file: given by -conf or $COMPCERT_INI, otherwise the
+  embedded ini, written once to a content-addressed file in the cache dir,
+  or to a fresh temp dir if there is no cache dir *)
 let ini_file_name =
   let- () = search_argv "-conf" |> Option.map (absolute_path (Sys.getcwd ())) in
   let- () = Sys.getenv_opt "COMPCERT_INI" in
-  let- () = if Sys.file_exists site_ini then Some site_ini else None in
   let iniContent = IniCrunch.read "compcert.ini" |> Option.get in
-  let filename = Filename.((temp_dir "compcert-" "") ^ dir_sep ^ "compcert.ini") in
-  let oc = open_out filename in
-  output_string oc iniContent;
-  close_out oc;
-  filename
+  match cache_dir () with
+  | Some dir ->
+    let filename = Filename.concat dir
+      ("compcert-" ^ Digest.to_hex (Digest.string iniContent) ^ ".ini") in
+    if not (Sys.file_exists filename) then begin
+      (* Write to a temp file and rename, so concurrent runs never see a partial file *)
+      let tmp, oc = Filename.open_temp_file ~temp_dir:dir "compcert-" ".tmp" in
+      output_string oc iniContent;
+      close_out oc;
+      Sys.rename tmp filename
+    end;
+    filename
+  | None ->
+    let filename = Filename.concat (Filename.temp_dir "compcert-" "") "compcert.ini" in
+    let oc = open_out filename in
+    output_string oc iniContent;
+    close_out oc;
+    filename
 
 let ini_dir = Filename.dirname ini_file_name
 
