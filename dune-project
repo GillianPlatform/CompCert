@@ -1,5 +1,4 @@
 (lang dune 2.9)
-(using dune_site 0.1)
 (name compcert)
 
 
@@ -10,7 +9,5 @@
 (package
  (name compcert)
  (synopsis "CompCert packaged for Gillian")
- (sites (share iniConfig))
  (depends
-  menhir
-  dune-site))
+  menhir))

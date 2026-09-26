@@ -31,18 +31,22 @@ let (let-) o f = match o with
 | Some o -> o
 | None -> f ()
 
-(* Locate the .ini file, which is either in the same directory as
-  the executable or in the directory ../share *)
-let site_ini = (List.nth Site.Sites.iniConfig 0) ^ Filename.dir_sep ^ "compcert.ini"
+(* Locate the .ini file: given by -conf or $COMPCERT_INI, otherwise the
+  embedded ini, written once to a content-addressed file in the temp dir *)
 let ini_file_name =
   let- () = search_argv "-conf" |> Option.map (absolute_path (Sys.getcwd ())) in
   let- () = Sys.getenv_opt "COMPCERT_INI" in
-  let- () = if Sys.file_exists site_ini then Some site_ini else None in
   let iniContent = IniCrunch.read "compcert.ini" |> Option.get in
-  let filename = Filename.((temp_dir "compcert-" "") ^ dir_sep ^ "compcert.ini") in
-  let oc = open_out filename in
-  output_string oc iniContent;
-  close_out oc;
+  let dir = Filename.get_temp_dir_name () in
+  let filename = Filename.concat dir
+    ("compcert-" ^ Digest.to_hex (Digest.string iniContent) ^ ".ini") in
+  if not (Sys.file_exists filename) then begin
+    (* Write to a temp file and rename, so concurrent runs never see a partial file *)
+    let tmp, oc = Filename.open_temp_file ~temp_dir:dir "compcert-" ".tmp" in
+    output_string oc iniContent;
+    close_out oc;
+    Sys.rename tmp filename
+  end;
   filename
 
 let ini_dir = Filename.dirname ini_file_name

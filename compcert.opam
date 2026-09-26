@@ -13,7 +13,6 @@ depends: [
   "menhir" {= "20231231"}
   "ocaml"
   "dune"
-  "dune-site"
   "crunch"
 ]
 build: [

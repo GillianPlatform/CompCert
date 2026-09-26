@@ -2,18 +2,8 @@
   (name compcert)
   (public_name compcert)
   (modules_without_implementation c dwarfTypes)
-  (libraries menhirLib str unix dune-site iniCrunch)
+  (libraries menhirLib str unix iniCrunch)
   (flags -w -27-9))
-
-(install
-  (files compcert.ini)
-  (section
-    (site
-      (compcert iniConfig))))
-    
-(generate_sites_module
-  (module site)
-  (sites compcert))
 
 (rule
  (target compcert.ini)
